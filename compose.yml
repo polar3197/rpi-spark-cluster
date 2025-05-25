@@ -1,0 +1,31 @@
+services:
+  spark-master:
+    build: ./nodes/master
+    container_name: spark-master
+    ports:
+      - "7077:7077"
+      - "8080:8080"
+    environment:
+      - "SPARK_MASTER_HOST=spark-master"
+    volumes:
+      - ./app:/app
+      - ./data:/data
+    networks:
+      - spark-net
+
+  spark-worker:
+    build: ./nodes/worker
+    container_name: spark-worker
+    environment:
+      - "SPARK_MASTER_URL=spark://192.168.0.32:7077"
+      - "SPARK_WORKER_MEMORY=2g"
+      - "SPARK_WORKER_CORES=2"
+    volumes:
+      - ./app:/app
+      - ./data:/data
+    networks:
+      - spark-net
+
+networks:
+  spark-net:
+
