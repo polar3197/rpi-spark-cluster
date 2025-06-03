@@ -29,10 +29,6 @@ services:
       - ./app:/app
     networks:
       - spark-net
-    deploy:
-      resources:
-        limits:
-          memory: 700m
 
 networks:
   spark-net:
