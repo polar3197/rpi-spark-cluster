@@ -1,6 +1,8 @@
 services:
   spark-master:
-    build: ./nodes/master
+    build: 
+      context: .
+      dockerfile: master/Dockerfile
     container_name: spark-master
     ports:
       - "7077:7077"
@@ -14,7 +16,9 @@ services:
       - spark-net
 
   spark-worker:
-    build: ./nodes/worker
+    build: 
+      context: .
+      dockerfile: worker/Dockerfile
     container_name: spark-worker
     environment:
       - "SPARK_MASTER_URL=spark://192.168.0.32:7077"
@@ -22,9 +26,12 @@ services:
       - "SPARK_WORKER_CORES=2"
     volumes:
       - ./app:/app
-      - ./data:/data
     networks:
       - spark-net
+    deploy:
+      resources:
+        limits:
+          memory: 700m
 
 networks:
   spark-net:
