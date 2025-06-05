@@ -9,32 +9,18 @@ services:
       - "8080:8080"
       - "4040:4040"
     environment:
-      - "SPARK_MASTER_HOST=spark-master"
-    volumes:
-      - ./app:/app
-      - ./data:/data
-    networks:
-      - spark-net
+      - "SPARK_MODE=master"
 
   spark-worker:
     build: 
       context: .
       dockerfile: worker/Dockerfile
     container_name: spark-worker
-    ports:
-      - "8081:8081"
     depends_on:
       - spark-master
     environment:
-      - "SPARK_MASTER_URL=spark://192.169:7077"
-      - "SPARK_WORKER_MEMORY=2g"
-      - "SPARK_WORKER_CORES=2"
-      - "SPARK_WORKER_WEBUI_PORT=8081" 
-    volumes:
-      - ./app:/app
-    networks:
-      - spark-net
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER=spark://192.168.0.32:7077 
 
-networks:
-  spark-net:
 
