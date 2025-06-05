@@ -23,7 +23,7 @@ ENV SPARK_VERSION=3.5.0
 ENV HADOOP_VERSION=3
 ENV SPARK_HOME=/opt/spark
 
-ENV SPARK_MASTER_URL=spark://192.168.0.32:7077
+ENV SPARK_MASTER_URL=spark://spark-master:7077
 
 RUN curl -L -o /tmp/spark.tgz https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
     tar -xzf /tmp/spark.tgz -C /opt && \
@@ -34,10 +34,6 @@ ENV PATH="$SPARK_HOME/bin:$PATH"
 
 # Install PySpark
 RUN pip install pyspark
-
-# spark env setup
-COPY config/spark-env.sh $SPARK_HOME/conf/
-RUN chmod +x $SPARK_HOME/conf/spark-env.sh
 
 # spark defaults setup
 COPY config/spark-defaults.conf $SPARK_HOME/conf/

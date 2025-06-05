@@ -22,7 +22,7 @@ services:
       dockerfile: worker/Dockerfile
     container_name: spark-worker
     environment:
-      - "SPARK_MASTER_URL=spark://192.168.0.32:7077"
+      - "SPARK_MASTER_URL=spark://spark-master:7077"
       - "SPARK_WORKER_MEMORY=2g"
       - "SPARK_WORKER_CORES=2"
     volumes:
