@@ -14,25 +14,18 @@ RUN apt-get update && apt-get install -y \
     default-jdk && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set Java environment variables
-ENV JAVA_HOME=/usr/lib/jvm/default-java
+# Set environment variables
+ENV JAVA_HOME="/usr/lib/jvm/default-java"
 ENV PATH="$JAVA_HOME/bin:$PATH"
+ENV PATH="/opt/spark/sbin:/opt/spark/bin:${PATH}"
+ENV SPARK_HOME="/opt/spark"
+ENV PYSPARK_PYTHON=python3
 
 # Add this after installing system packages
-ENV SPARK_VERSION=3.5.0
-ENV HADOOP_VERSION=3
-ENV SPARK_HOME=/opt/spark
-
-ENV SPARK_MASTER_URL=spark://spark-master:7077
-
-ENV PYSPARK_SUBMIT_ARGS="--master spark://spark-master:7077 pyspark-shell"
-
-RUN curl -L -o /tmp/spark.tgz https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
+RUN curl -L -o /tmp/spark.tgz https://archive.apache.org/dist/spark/spark-3.5.0/spark-3.5.0-bin-hadoop3.tgz && \
     tar -xzf /tmp/spark.tgz -C /opt && \
-    mv /opt/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} /opt/spark && \
+    mv /opt/spark-3.5.0-bin-hadoop3 /opt/spark && \
     rm /tmp/spark.tgz
-
-ENV PATH="$SPARK_HOME/bin:$PATH"
 
 # Install PySpark
 RUN pip install pyspark
@@ -42,12 +35,9 @@ COPY config/pyspark-m.sh $SPARK_HOME/conf/
 RUN chmod +x $SPARK_HOME/conf/pyspark-m.sh
 
 # spark defaults setup
-COPY config/spark-defaults.conf $SPARK_HOME/conf/
-RUN chmod +x $SPARK_HOME/conf/spark-defaults.conf
+COPY conf/spark-defaults.conf "$SPARK_HOME/conf"
 
 COPY master/start-master.sh /opt/start-master.sh
 RUN chmod +x /opt/start-master.sh
-
-RUN ln -s $SPARK_HOME/conf/pyspark-m.sh /usr/local/bin/pyspark-m
 
 CMD ["/opt/start-master.sh"]
