@@ -36,9 +36,9 @@ COPY config/pyspark-m.sh $SPARK_HOME/conf/
 RUN chmod +x $SPARK_HOME/conf/pyspark-m.sh
 
 # spark defaults setup
-COPY conf/spark-defaults.conf "$SPARK_HOME/conf"
+COPY config/spark-defaults.conf "$SPARK_HOME/conf"
 
-COPY master/start-worker.sh /opt/start-worker.sh
+COPY worker/start-worker.sh /opt/start-worker.sh
 RUN chmod +x /opt/start-worker.sh
 
 # Default command starts Spark worker

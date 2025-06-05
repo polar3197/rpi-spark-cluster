@@ -35,7 +35,7 @@ COPY config/pyspark-m.sh $SPARK_HOME/conf/
 RUN chmod +x $SPARK_HOME/conf/pyspark-m.sh
 
 # spark defaults setup
-COPY conf/spark-defaults.conf "$SPARK_HOME/conf"
+COPY config/spark-defaults.conf "$SPARK_HOME/conf"
 
 COPY master/start-master.sh /opt/start-master.sh
 RUN chmod +x /opt/start-master.sh
