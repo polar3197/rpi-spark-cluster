@@ -9,8 +9,9 @@ services:
       - "8080:8080"
       - "4040:4040"
     environment:
-      - "SPARK_MODE=master"
-      - "SPARK_PUBLIC_DNS=192.168.0.32"
+      - SPARK_MODE=master
+      - SPARK_PUBLIC_DNS=192.168.0.32
+      - SPARK_MASTER_HOST=192.168.0.32
 
   spark-worker:
     build: 
@@ -18,7 +19,7 @@ services:
       dockerfile: worker/Dockerfile
     container_name: spark-worker
     environment:
-      - "SPARK_MODE=worker"
-      - "SPARK_MASTER_URL=spark://192.168.0.32:7077"
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://192.168.0.32:7077
 
 
