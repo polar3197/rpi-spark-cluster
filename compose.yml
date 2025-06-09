@@ -16,8 +16,6 @@ services:
       context: .
       dockerfile: worker/Dockerfile
     container_name: spark-worker
-    depends_on:
-      - spark-master
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER=spark://192.168.0.32:7077 
