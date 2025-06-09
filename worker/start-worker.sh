@@ -6,5 +6,5 @@ echo "Starting Spark worker with ${SPARK_WORKER_CORES:-2} cores and ${SPARK_WORK
 exec ${SPARK_HOME}/bin/spark-class org.apache.spark.deploy.worker.Worker \
   --cores "${SPARK_WORKER_CORES:-2}" \
   --memory "${SPARK_WORKER_MEMORY:-2g}" \
-  "spark://192.168.0.32:7077"
+  "${SPARK_MASTER_URL}"
 
