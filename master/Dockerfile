@@ -22,9 +22,9 @@ ENV SPARK_HOME="/opt/spark"
 ENV PYSPARK_PYTHON=python3
 
 # Add this after installing system packages
-RUN curl -L -o /tmp/spark.tgz https://archive.apache.org/dist/spark/spark-3.5.0/spark-3.5.0-bin-hadoop3.tgz && \
+RUN curl -L -o /tmp/spark.tgz https://dlcdn.apache.org/spark/spark-3.5.6/spark-3.5.6-bin-hadoop3.tgz && \
     tar -xzf /tmp/spark.tgz -C /opt && \
-    mv /opt/spark-3.5.0-bin-hadoop3 /opt/spark && \
+    mv /opt/spark-3.5.6-bin-hadoop3 /opt/spark && \
     rm /tmp/spark.tgz
 
 # Install PySpark
