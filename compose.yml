@@ -11,7 +11,7 @@ services:
     environment:
       - SPARK_MODE=master
       - SPARK_PUBLIC_DNS=192.168.0.32
-      - SPARK_MASTER_HOST=192.168.0.32
+      - SPARK_MASTER_HOST=0.0.0.0
 
   spark-worker:
     build: 
