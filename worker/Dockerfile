@@ -32,12 +32,12 @@ RUN curl -L -o /tmp/spark.tgz https://dlcdn.apache.org/spark/spark-3.5.6/spark-3
 # Install PySpark
 RUN pip install pyspark
 
-# spark env setup
-COPY config/pyspark-m.sh $SPARK_HOME/conf/
-RUN chmod +x $SPARK_HOME/conf/pyspark-m.sh
-
 # spark defaults setup
 COPY config/spark-defaults.conf "$SPARK_HOME/conf"
+
+# set up cluster environment variables
+COPY ../conf/spark-env.sh $SPARK_HOME/conf/spark-env.sh
+RUN chmod +x $SPARK_HOME/conf/spark-env.sh
 
 COPY worker/start-worker.sh /opt/start-worker.sh
 RUN chmod +x /opt/start-worker.sh
