@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     software-properties-common \
     procps \
+    iproute2 \
     git \
     vim \
     default-jdk && \
