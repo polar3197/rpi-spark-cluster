@@ -10,12 +10,11 @@ if [[ "$SPARK_MODE" == "master" ]]; then
 else
   # Find the IP that the host machine uses on its network
   LOCAL_IP=$(ip route get $SPARK_MASTER_HOST_IP | awk '/src/ { print $7; exit }')
-  export SPARK_LOCAL_IP="$LOCAL_IP"
 
   # WORKER NODE
-  export SPARK_MASTER_URL="spark://$SPARK_PUBLIC_DNS:7077"
   export SPARK_LOCAL_IP=0.0.0.0
   export SPARK_PUBLIC_DNS="$LOCAL_IP"  # So master can reach this worker
+  export SPARK_MASTER_URL="spark://$SPARK_MASTER_HOST_IP:7077"
   export SPARK_WORKER_CORES=${SPARK_WORKER_CORES:-2}
   export SPARK_WORKER_MEMORY=${SPARK_WORKER_MEMORY:-2g}
 
