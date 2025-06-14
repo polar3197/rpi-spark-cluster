@@ -1,18 +1,17 @@
 #!/bin/bash
 
-SPARK_MASTER_HOST_IP="${SPARK_MASTER_HOST:-192.168.0.32}"
-
-# Find the IP that the host machine uses on its network
-LOCAL_IP=$(ip route get $SPARK_MASTER_HOST_IP | awk '/src/ { print $7; exit }')
-export SPARK_LOCAL_IP="$LOCAL_IP"
-
 if [[ "$SPARK_MODE" == "master" ]]; then
   # MASTER NODE
-  export SPARK_PUBLIC_DNS="$LOCAL_IP"  # Will be 192.198.0.32. (so workers can reach it)
+  export SPARK_LOCAL_IP=0.0.0.0
+  export SPARK_PUBLIC_DNS=${SPARK_MASTER_HOST_IP}
   echo "[spark-env.sh] Configuring Spark MASTER node"
   echo "[spark-env.sh] SPARK_PUBLIC_DNS=$SPARK_PUBLIC_DNS"
 
 else
+  # Find the IP that the host machine uses on its network
+  LOCAL_IP=$(ip route get $SPARK_MASTER_HOST_IP | awk '/src/ { print $7; exit }')
+  export SPARK_LOCAL_IP="$LOCAL_IP"
+
   # WORKER NODE
   export SPARK_MASTER_URL="spark://$SPARK_MASTER_HOST_IP:7077"
   export SPARK_PUBLIC_DNS="$LOCAL_IP"  # So master can reach this worker
