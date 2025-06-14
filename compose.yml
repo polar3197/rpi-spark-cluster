@@ -7,19 +7,18 @@ services:
     ports:
       - "7077:7077"
       - "8080:8080"
-      - "4040:4040"
     environment:
       - SPARK_MODE=master
-      #- SPARK_PUBLIC_DNS=192.168.0.32
-      #- SPARK_MASTER_HOST=0.0.0.0
 
   spark-worker:
     build: 
       context: .
       dockerfile: worker/Dockerfile
     container_name: spark-worker
+    ports:
+      - "7078:7078"
+      - "8081:8081"
     environment:
       - SPARK_MODE=worker
-      #- SPARK_MASTER_URL=spark://192.168.0.32:7077
 
 

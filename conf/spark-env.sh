@@ -2,35 +2,34 @@
 
 set -e
 
-# Use SPARK_MODE (passed via docker-compose.yml) to decide role
-ROLE=${SPARK_MODE:-worker}
-
-# Determine the IP used to reach the master (defaults to fallback if not set)
-TARGET_IP=${SPARK_MASTER_HOST:-192.168.0.32}
-SPARK_LOCAL_IP=$(ip route get "$TARGET_IP" | awk '/src/ { print $7; exit }')
-export SPARK_LOCAL_IP
-export SPARK_PUBLIC_DNS=$SPARK_LOCAL_IP
-
-echo "[spark-env.sh] SPARK_MODE=$ROLE"
-echo "[spark-env.sh] SPARK_LOCAL_IP=$SPARK_LOCAL_IP"
-echo "[spark-env.sh] SPARK_PUBLIC_DNS=$SPARK_PUBLIC_DNS"
+echo "[spark-env.sh] SPARK_MODE=$SPARK_MODE"
 
 export SPARK_MASTER_HOST=0.0.0.0
 export SPARK_MASTER_PORT=7077
 
-if [[ "$ROLE" == "master" ]]; then
+if [[ "$SPARK_MODE" == "master" ]]; then
+  export SPARK_PUBLIC_DNS=192.168.0.32
   export SPARK_MASTER_WEBUI_PORT=8080
   echo "[spark-env.sh] Configured master with SPARK_MASTER_HOST=$SPARK_MASTER_HOST"
 fi
 
-if [[ "$ROLE" == "worker" ]]; then
+if [[ "$SPARK_MODE" == "worker" ]]; then
+  # Determine the IP used to reach the master
+  TARGET_IP=${SPARK_MASTER_HOST:-192.168.0.32}
+  SPARK_LOCAL_IP=$(ip route get "$TARGET_IP" | awk '/src/ { print $7; exit }')
+  export SPARK_LOCAL_IP
+  export SPARK_PUBLIC_DNS=$SPARK_LOCAL_IP
+
   export SPARK_WORKER_MEMORY=${SPARK_WORKER_MEMORY:-2800m}
   export SPARK_WORKER_CORES=${SPARK_WORKER_CORES:-2}
   export SPARK_WORKER_PORT=${SPARK_WORKER_PORT:-7078}
   export SPARK_WORKER_WEBUI_PORT=${SPARK_WORKER_WEBUI_PORT:-8081}
-  export SPARK_MASTER_URL=${SPARK_MASTER_URL:-spark://SPARK_PUBLIC_DNS:SPARK_MASTER_PORT}
+  export SPARK_MASTER_URL=${SPARK_MASTER_URL:-spark://$SPARK_PUBLIC_DNS:$SPARK_MASTER_PORT}
   echo "[spark-env.sh] Configured worker with $SPARK_WORKER_CORES cores and $SPARK_WORKER_MEMORY memory"
 fi
+
+echo "[spark-env.sh] SPARK_LOCAL_IP=$SPARK_LOCAL_IP"
+echo "[spark-env.sh] SPARK_PUBLIC_DNS=$SPARK_PUBLIC_DNS"
 
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more

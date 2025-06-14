@@ -1,46 +1,39 @@
 FROM --platform=linux/arm64 python:3.10-slim
 
-# Install Java 11 and required system utilities
-# Install dependencies and Java
-RUN apt-get update && apt-get install -y \
+# install necessary dependencies for PySpark configuration
+RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     wget \
     ca-certificates \
     gnupg \
-    software-properties-common \
     procps \
     iproute2 \
-    git \
-    vim \
     default-jdk && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set environment variables
-ENV JAVA_HOME=/usr/lib/jvm/default-java
-ENV PATH="$JAVA_HOME/bin:$PATH"
+# set environment variables
+ENV JAVA_HOME="/usr/lib/jvm/default-java"
 ENV SPARK_HOME=/opt/spark
+ENV PATH="$JAVA_HOME/bin:$PATH"
 ENV PATH="/opt/spark/sbin:/opt/spark/bin:${PATH}"
-ENV SPARK_HOME="/opt/spark"
 ENV PYSPARK_PYTHON=python3
 
-# Add this after installing system packages
-RUN curl -L -o /tmp/spark.tgz https://dlcdn.apache.org/spark/spark-3.5.6/spark-3.5.6-bin-hadoop3.tgz && \
+# make ports reachable
+EXPOSE 8080
+EXPOSE 7077
+
+# Download apache spark
+RUN curl -L -o /tmp/spark.tgz https://dlcdn.apache.org/spark/spark-4.0.0/spark-4.0.0-bin-hadoop3.tgz && \
     tar -xzf /tmp/spark.tgz -C /opt && \
-    mv /opt/spark-3.5.6-bin-hadoop3 /opt/spark && \
+    mv /opt/spark-4.0.0-bin-hadoop3 /opt/spark && \
     rm /tmp/spark.tgz
 
 # Install PySpark
 RUN pip install pyspark
 
-# spark defaults setup
-COPY config/spark-defaults.conf "$SPARK_HOME/conf"
-
-# set up cluster environment variables
-COPY ../conf/spark-env.sh $SPARK_HOME/conf/spark-env.sh
-RUN chmod +x $SPARK_HOME/conf/spark-env.sh
-
+# move start-up script to correct location in container
 COPY worker/start-worker.sh /opt/start-worker.sh
 RUN chmod +x /opt/start-worker.sh
 
 # Default command starts Spark worker
-CMD ["/opt/start-worker.sh"]
+CMD ["/opt/start-master.sh"]
