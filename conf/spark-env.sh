@@ -1,35 +1,31 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-set -e
+SPARK_MASTER_HOST_IP="${SPARK_MASTER_HOST:-192.168.0.32}"
 
-echo "[spark-env.sh] SPARK_MODE=$SPARK_MODE"
-
-export SPARK_MASTER_HOST=0.0.0.0
-export SPARK_MASTER_PORT=7077
+# Find the IP that the host machine uses on its network
+LOCAL_IP=$(ip route get $SPARK_MASTER_HOST_IP | awk '/src/ { print $7; exit }')
+export SPARK_LOCAL_IP="$LOCAL_IP"
 
 if [[ "$SPARK_MODE" == "master" ]]; then
-  export SPARK_PUBLIC_DNS=192.168.0.32
-  export SPARK_MASTER_WEBUI_PORT=8080
-  echo "[spark-env.sh] Configured master with SPARK_MASTER_HOST=$SPARK_MASTER_HOST"
-fi
+  # MASTER NODE
+  export SPARK_PUBLIC_DNS="$LOCAL_IP"  # Will be 192.198.0.32. (so workers can reach it)
+  echo "[spark-env.sh] Configuring Spark MASTER node"
+  echo "[spark-env.sh] SPARK_PUBLIC_DNS=$SPARK_PUBLIC_DNS"
 
-if [[ "$SPARK_MODE" == "worker" ]]; then
-  # Determine the IP used to reach the master
-  TARGET_IP=${SPARK_MASTER_HOST:-192.168.0.32}
-  SPARK_LOCAL_IP=$(ip route get "$TARGET_IP" | awk '/src/ { print $7; exit }')
-  export SPARK_LOCAL_IP
-  export SPARK_PUBLIC_DNS=$SPARK_LOCAL_IP
-
-  export SPARK_WORKER_MEMORY=${SPARK_WORKER_MEMORY:-2800m}
+else
+  # WORKER NODE
+  export SPARK_MASTER_URL="spark://$SPARK_MASTER_HOST_IP:7077"
+  export SPARK_PUBLIC_DNS="$LOCAL_IP"  # So master can reach this worker
   export SPARK_WORKER_CORES=${SPARK_WORKER_CORES:-2}
-  export SPARK_WORKER_PORT=${SPARK_WORKER_PORT:-7078}
-  export SPARK_WORKER_WEBUI_PORT=${SPARK_WORKER_WEBUI_PORT:-8081}
-  export SPARK_MASTER_URL=${SPARK_MASTER_URL:-spark://$SPARK_PUBLIC_DNS:$SPARK_MASTER_PORT}
-  echo "[spark-env.sh] Configured worker with $SPARK_WORKER_CORES cores and $SPARK_WORKER_MEMORY memory"
+  export SPARK_WORKER_MEMORY=${SPARK_WORKER_MEMORY:-2g}
+
+  echo "[spark-env.sh] Configuring Spark WORKER node"
+  echo "[spark-env.sh] SPARK_MASTER_URL=$SPARK_MASTER_URL"
+  echo "[spark-env.sh] SPARK_PUBLIC_DNS=$SPARK_PUBLIC_DNS"
+  echo "[spark-env.sh] CORES=$SPARK_WORKER_CORES, MEMORY=$SPARK_WORKER_MEMORY"
 fi
 
 echo "[spark-env.sh] SPARK_LOCAL_IP=$SPARK_LOCAL_IP"
-echo "[spark-env.sh] SPARK_PUBLIC_DNS=$SPARK_PUBLIC_DNS"
 
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more

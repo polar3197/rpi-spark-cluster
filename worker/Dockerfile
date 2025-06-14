@@ -31,6 +31,11 @@ RUN curl -L -o /tmp/spark.tgz https://dlcdn.apache.org/spark/spark-4.0.0/spark-4
 # Install PySpark
 RUN pip install pyspark
 
+# place spark-env.sh in correct place
+COPY conf/spark-env.sh $SPARK_HOME/conf/spark-env.sh
+RUN chmod +x $SPARK_HOME/conf/spark-env.sh
+
+
 # move start-up script to correct location in container
 COPY worker/start-worker.sh /opt/start-worker.sh
 RUN chmod +x /opt/start-worker.sh
