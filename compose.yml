@@ -20,5 +20,6 @@ services:
       - "8081:8081"
     environment:
       - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://192.168.0.32:7077
 
 

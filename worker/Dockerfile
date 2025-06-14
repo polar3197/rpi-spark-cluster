@@ -36,4 +36,4 @@ COPY worker/start-worker.sh /opt/start-worker.sh
 RUN chmod +x /opt/start-worker.sh
 
 # Default command starts Spark worker
-CMD ["/opt/start-master.sh"]
+CMD ["/opt/start-worker.sh"]
