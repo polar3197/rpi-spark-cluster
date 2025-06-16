@@ -2,7 +2,7 @@ FROM python:3.10-slim
 
 # Install dependencies, download & extract Spark, cleanup
 ENV SPARK_VERSION="3.5.6"
-ENV JAVA_HOME="/usr/lib/jvm/default-java"
+ENV JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
 ENV SPARK_HOME="/opt/spark"
 ENV PYSPARK_PYTHON="python3"
 ENV PATH="${JAVA_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin:$PATH"
