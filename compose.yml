@@ -22,6 +22,5 @@ services:
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_HOST_IP=192.168.0.32
-      - SPARK_MASTER_URL=spark://192.168.0.32:7077
 
 
