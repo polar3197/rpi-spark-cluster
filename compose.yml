@@ -10,6 +10,8 @@ services:
     environment:
       - SPARK_MODE=master
       - SPARK_MASTER_HOST_IP=192.168.0.32
+    volumes:
+      - ./conf/spark-env.sh:/opt/spark/conf/spark-env.sh
 
   spark-worker:
     build: 
@@ -22,5 +24,7 @@ services:
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_HOST_IP=192.168.0.32
+    volumes:
+      - ./conf/spark-env.sh:/opt/spark/conf/spark-env.sh
 
 

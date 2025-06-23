@@ -2,7 +2,7 @@
 
 if [[ "$SPARK_MODE" == "master" ]]; then
   # MASTER NODE
-  export SPARK_LOCAL_IP=192.168.0.32
+  export SPARK_LOCAL_IP=0.0.0.0
   export SPARK_PUBLIC_DNS=192.168.0.32
   echo "[spark-env.sh] Configuring Spark MASTER node"
   echo "[spark-env.sh] SPARK_PUBLIC_DNS=$SPARK_PUBLIC_DNS"
@@ -11,20 +11,19 @@ else
   # Find the IP that the host machine uses on its network
   LOCAL_IP=$(ip route get 192.168.0.32 | awk '/src/ { print $7; exit }')
   # WORKER NODE
-  export SPARK_LOCAL_IP="$LOCAL_IP"
+  # export SPARK_LOCAL_IP=0.0.0.0
+  echo "[spark-env.sh] Configuring Spark WORKER node"
   echo "[spark-env.sh] SPARK_LOCAL_IP=$SPARK_LOCAL_IP"
   export SPARK_PUBLIC_DNS="$LOCAL_IP"  # So master can reach this worker
   export SPARK_MASTER_URL="spark://192.168.0.32:7077"
-  export SPARK_WORKER_CORES=${SPARK_WORKER_CORES:-2}
-  export SPARK_WORKER_MEMORY=${SPARK_WORKER_MEMORY:-2g}
+  # export SPARK_WORKER_CORES=${SPARK_WORKER_CORES:-2}
+  # export SPARK_WORKER_MEMORY=${SPARK_WORKER_MEMORY:-2g}
 
-  echo "[spark-env.sh] Configuring Spark WORKER node"
+  
   echo "[spark-env.sh] SPARK_MASTER_URL=$SPARK_MASTER_URL"
   echo "[spark-env.sh] SPARK_PUBLIC_DNS=$SPARK_PUBLIC_DNS"
   echo "[spark-env.sh] CORES=$SPARK_WORKER_CORES, MEMORY=$SPARK_WORKER_MEMORY"
 fi
-
-echo "[spark-env.sh] SPARK_LOCAL_IP=$SPARK_LOCAL_IP"
 
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
