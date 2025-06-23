@@ -11,7 +11,7 @@ else
   # Find the IP that the host machine uses on its network
   LOCAL_IP=$(ip route get 192.168.0.32 | awk '/src/ { print $7; exit }')
   # WORKER NODE
-  # export SPARK_LOCAL_IP=0.0.0.0
+  export SPARK_LOCAL_IP=$LOCAL_IP
   echo "[spark-env.sh] Configuring Spark WORKER node"
   echo "[spark-env.sh] SPARK_LOCAL_IP=$SPARK_LOCAL_IP"
   export SPARK_PUBLIC_DNS="$LOCAL_IP"  # So master can reach this worker
