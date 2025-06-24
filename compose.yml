@@ -10,8 +10,8 @@ services:
     environment:
       - SPARK_MODE=master
       - SPARK_MASTER_HOST=192.168.0.32
-      # - SPARK_PUBLIC_DNS=192.168.0.32
-      # - SPARK_LOCAL_IP=0.0.0.0
+      - SPARK_PUBLIC_DNS=192.168.0.32
+      - SPARK_LOCAL_IP=0.0.0.0
     volumes:
       - ./conf/spark-env.sh:/opt/spark/conf/spark-env.sh
 
