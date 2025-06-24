@@ -4,6 +4,7 @@ services:
       context: .
       dockerfile: master/Dockerfile
     container_name: spark-master
+    network_mode: "host"
     ports:
       - "7077:7077"
       - "8080:8080"
@@ -20,6 +21,7 @@ services:
       context: .
       dockerfile: worker/Dockerfile
     container_name: spark-worker
+    network_mode: "host"
     ports:
       - "7078:7078"
       - "8081:8081"
