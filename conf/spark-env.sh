@@ -9,7 +9,7 @@ if [[ "$SPARK_MODE" == "master" ]]; then
 
 else
   # Find the IP that the host machine uses on its network
-  LOCAL_IP=$(ip route get $SPARK_MASTER_HOST | awk '/src/ { print $7; exit }')
+  LOCAL_IP=$(ip route get 8.8.8.8 | awk '/src/ { print $7; exit }')
   # WORKER NODE
   export SPARK_LOCAL_IP="$LOCAL_IP"
   echo "[spark-env.sh] Configuring Spark WORKER node"
