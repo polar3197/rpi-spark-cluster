@@ -3,9 +3,8 @@ set -e
 
 echo "Starting Spark master"
 
-if [ -f "${SPARK_HOME}/conf/spark-env.sh" ]; then
-  . "${SPARK_HOME}/conf/spark-env.sh"
-fi
+# Source environment
+. "${SPARK_HOME}/conf/spark-env.sh"
 
 exec ${SPARK_HOME}/bin/spark-class org.apache.spark.deploy.master.Master \
   --host 0.0.0.0 \
