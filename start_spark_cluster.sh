@@ -8,14 +8,14 @@ ACTION="$1"
 
 if [[ "$ACTION" == "-up" ]]; then
   
-  echo "Starting Spark master on Mac..."
-  cd "$LOCAL_PROJECT_DIR" || exit 1
-  docker compose up -d --build --rm spark-master
-
   for WORKER in "${WORKERS[@]}"; do
     echo "Starting Spark worker on $WORKER..."
-    ssh "$WORKER" "cd $REMOTE_PROJECT_DIR && docker compose up -d --build --rm spark-worker"
+    ssh "$WORKER" "cd $REMOTE_PROJECT_DIR && docker compose up -d --build spark-worker"
   done
+
+  echo "Starting Spark master on Mac..."
+  cd "$LOCAL_PROJECT_DIR" || exit 1
+  docker compose up -d --build spark-master
 
   echo "Spark cluster started."
 
