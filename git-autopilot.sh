@@ -2,7 +2,7 @@
 set -e
 
 # Step 1: Commit and push changes locally
-echo "🔧 Committing and pushing local changes..."
+echo "Committing and pushing local changes..."
 git add .
 git commit -m "autopilot" || echo "Nothing to commit"
 git push
