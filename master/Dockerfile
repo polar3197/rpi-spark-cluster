@@ -14,6 +14,7 @@ RUN apt-get update && \
         openjdk-17-jre-headless \
         curl \
         wget \
+        vim \
         ca-certificates \
         gnupg \
         procps \
