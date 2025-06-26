@@ -2,7 +2,7 @@
 
 if [[ "$SPARK_MODE" == "master" ]]; then
   export SPARK_LOCAL_IP=0.0.0.0
-  export SPARK_PUBLIC_DNS=192.168.0.32
+  export SPARK_PUBLIC_DNS=192.168.1.116
   echo "[spark-env.sh] Configuring Spark MASTER node"
   echo "[spark-env.sh] SPARK_PUBLIC_DNS=$SPARK_PUBLIC_DNS"
   echo "[spark-env.sh] SPARK_LOCAL_IP=$SPARK_LOCAL_IP"
@@ -16,7 +16,7 @@ else
   echo "[spark-env.sh] SPARK_LOCAL_IP=$SPARK_LOCAL_IP"
 
   export SPARK_PUBLIC_DNS="$LOCAL_IP"  # So master can reach this worker
-  export SPARK_MASTER_URL="spark://192.168.0.32:7077"
+  export SPARK_MASTER_URL="spark://192.168.1.116:7077"
   # export SPARK_WORKER_CORES=${SPARK_WORKER_CORES:-2}
   # export SPARK_WORKER_MEMORY=${SPARK_WORKER_MEMORY:-2g}
 
@@ -54,7 +54,7 @@ fi
 
 # Options read by executors and drivers running inside the cluster
 # - SPARK_LOCAL_IP        #, to set the IP address Spark binds to on this node
-# - SPARK_PUBLIC_DNS=192.168.0.32      #, to set the public DNS name of the driver program
+# - SPARK_PUBLIC_DNS=192.168.1.116      #, to set the public DNS name of the driver program
 # - SPARK_LOCAL_DIRS, storage directories to use on this node for shuffle and RDD data
 # - MESOS_NATIVE_JAVA_LIBRARY, to point to your libmesos.so if you use Mesos
 

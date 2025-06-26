@@ -28,7 +28,7 @@ RUN apt-get update && \
            ${SPARK_HOME}/jars/*mesos* \
            ${SPARK_HOME}/jars/*kubernetes* \
            ${SPARK_HOME}/jars/*hive* \
-           ${SPARK_HOME}/jars/*avro* \
+           #${SPARK_HOME}/jars/*avro* \
            ${SPARK_HOME}/jars/*parquet* \
            ${SPARK_HOME}/jars/*orc*
 
