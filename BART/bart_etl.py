@@ -51,7 +51,7 @@ with open(filename, "a") as f:
 s3 = boto3.client('s3')
 
 try:
-    s3.upload_file(f"{now}-EMBR-data.json", "rock-bart-data", f"embarcadero/{filename}")
+    s3.upload_file(f"{now}-EMBR-data.json", "bart-station-data", f"embarcadero/{filename}")
     os.remove(filename)
     print(f"Uploaded and deleted local file: {filename}")
 except Exception as e:
