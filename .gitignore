@@ -1,3 +1,4 @@
 # Ignore virtual environments
 .caddy-bart-venv/
 .picl-venv/
+.caddy-bart-venv/
